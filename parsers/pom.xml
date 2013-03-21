@@ -40,6 +40,9 @@
               <goals>
                 <goal>javacc</goal>
               </goals>
+              <configuration>
+              	<outputDirectory>${basedir}/src/main/java/</outputDirectory>
+              </configuration>
             </execution>
           </executions>
         </plugin>
