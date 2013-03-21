@@ -38,41 +38,33 @@
  */
 package org.semanticweb.owlapi.api.test.anonymous;
 
+import java.net.URL;
+
 import org.junit.Test;
-import org.semanticweb.owlapi.api.test.baseclasses.AbstractFileRoundTrippingTestCase;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+import uk.ac.manchester.cs.owl.owlapi.turtle.parser.TurtleOntologyParser;
 
 /** Author: Stian Soiland-Reyes<br>
  * The University Of Manchester<br>
  * Information Management Group<br>
  * Date: 2013-03-21<br>
  * <br> */
-public class AnonymousTurtleEmptyTestCase extends AbstractFileRoundTrippingTestCase {
-    @Override
-    protected String getFileName() {
-        return "testBlankNodesEmpty.ttl";
-    }
+public class AnonymousTurtleEmptyTestCase {
 
-    @Override
+	private static final String TURTLE_FILE = "/testBlankNodesEmpty.ttl";
+	OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+    
     @Test
-    public void testTurtle() throws Exception {
-        // XXX roundtripping is broken but the results seem semantically
-        // equivalent
-        // super.testTurtle();
-    }
-
-    @Override
-    @Test
-    public void testFunctionalSyntax() throws Exception {}
-
-    @Override
-    @Test
-    public void testManchesterOWLSyntax() throws Exception {}
-
-    @Override
-    @Test
-    public void testOWLXML() throws Exception {}
-
-    @Override
-    @Test
-    public void testRDFXML() throws Exception {}
+	public void parseFile() throws Exception {
+    	URL resource = getClass().getResource(TURTLE_FILE);
+        IRI iri = IRI.create(resource.toURI());
+		TurtleOntologyParser parser = new TurtleOntologyParser();
+		//parser.setOWLOntologyManager(manager);
+		OWLOntology ontology = manager.createOntology();
+		parser.parse(iri, ontology);
+	}
 }
