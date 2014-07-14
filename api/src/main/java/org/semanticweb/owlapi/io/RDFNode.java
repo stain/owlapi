@@ -22,7 +22,7 @@ import org.semanticweb.owlapi.model.HasIRI;
  * @since 3.2
  */
 public abstract class RDFNode implements Serializable, Comparable<RDFNode>,
-        HasIRI {
+        HasIRI, com.github.commonsrdf.api.RDFTerm {
 
     /**
      * Determines if this node is a literal node.

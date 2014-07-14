@@ -26,7 +26,7 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
  *         Informatics Group
  * @since 3.2
  */
-public class RDFLiteral extends RDFNode {
+public class RDFLiteral extends RDFNode, com.github.commonsrdf.api.Literal {
 
     private final @Nonnull String lexicalValue;
     private final @Nonnull String lang;

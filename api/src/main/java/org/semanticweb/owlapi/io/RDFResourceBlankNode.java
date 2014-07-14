@@ -1,7 +1,7 @@
 /* This file is part of the OWL API.
  * The contents of this file are subject to the LGPL License, Version 3.0.
  * Copyright 2014, The University of Manchester
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
@@ -21,7 +21,7 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.NodeID;
 
 /** Anonymous node implementation. */
-public class RDFResourceBlankNode extends RDFResource {
+public class RDFResourceBlankNode extends RDFResource implements com.github.commonsrdf.api.BlankNode {
 
     private final @Nonnull IRI resource;
     private final boolean isIndividual;
@@ -29,7 +29,7 @@ public class RDFResourceBlankNode extends RDFResource {
 
     /**
      * Create an RDFResource that is anonymous.
-     * 
+     *
      * @param resource
      *        The IRI of the resource
      * @param isIndividual
@@ -45,7 +45,7 @@ public class RDFResourceBlankNode extends RDFResource {
 
     /**
      * Create an RDFResource that is anonymous.
-     * 
+     *
      * @param anonId
      *        the number at the end of the anon IRI
      * @param isIndividual
@@ -108,4 +108,9 @@ public class RDFResourceBlankNode extends RDFResource {
     public IRI getResource() {
         return resource;
     }
+
+  	@Override
+  	public String internalIdentifier() {
+  		return resource.getRemainder().get();
+  	}
 }
