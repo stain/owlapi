@@ -1,7 +1,7 @@
 /* This file is part of the OWL API.
  * The contents of this file are subject to the LGPL License, Version 3.0.
  * Copyright 2014, The University of Manchester
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
@@ -30,18 +30,18 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 /**
  * Represents International Resource Identifiers.
- * 
+ *
  * @author Matthew Horridge, The University of Manchester, Information
  *         Management Group
  * @since 3.0.0
  */
 public class IRI
-    implements OWLAnnotationSubject, OWLAnnotationValue, SWRLPredicate, CharSequence, OWLPrimitive, HasShortForm {
+    implements OWLAnnotationSubject, OWLAnnotationValue, SWRLPredicate, CharSequence, OWLPrimitive, HasShortForm, org.apache.commons.rdf.api.IRI {
 
     /**
      * Obtains this IRI as a URI. Note that Java URIs handle unicode characters,
      * so there is no loss during this translation.
-     * 
+     *
      * @return The URI
      */
     public URI toURI() {
@@ -50,7 +50,7 @@ public class IRI
 
     /**
      * Determines if this IRI is absolute.
-     * 
+     *
      * @return {@code true} if this IRI is absolute or {@code false} if this IRI
      *         is not absolute
      */
@@ -109,7 +109,7 @@ public class IRI
      * &lt;http://www.w3.org/2000/01/rdf-schema#&gt; or
      * &lt;http://www.w3.org/2001/XMLSchema#&gt; or
      * &lt;http://www.w3.org/2002/07/owl#&gt;
-     * 
+     *
      * @return {@code true} if the IRI is in the reserved vocabulary, otherwise
      *         {@code false}.
      */
@@ -121,7 +121,7 @@ public class IRI
     /**
      * Determines if this IRI is equal to the IRI that {@code owl:Thing} is
      * named with.
-     * 
+     *
      * @return {@code true} if this IRI is equal to
      *         &lt;http://www.w3.org/2002/07/owl#Thing&gt; and otherwise
      *         {@code false}
@@ -133,7 +133,7 @@ public class IRI
     /**
      * Determines if this IRI is equal to the IRI that {@code owl:Nothing} is
      * named with.
-     * 
+     *
      * @return {@code true} if this IRI is equal to
      *         &lt;http://www.w3.org/2002/07/owl#Nothing&gt; and otherwise
      *         {@code false}
@@ -145,7 +145,7 @@ public class IRI
     /**
      * Determines if this IRI is equal to the IRI that is named
      * {@code rdf:PlainLiteral}.
-     * 
+     *
      * @return {@code true} if this IRI is equal to
      *         &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral&gt;,
      *         otherwise {@code false}
@@ -156,7 +156,7 @@ public class IRI
 
     /**
      * Gets the fragment of the IRI.
-     * 
+     *
      * @return The IRI fragment, or empty string if the IRI does not have a
      *         fragment
      * @deprecated use getNCName() - getFragment() does not return a real
@@ -179,16 +179,16 @@ public class IRI
 
     /**
      * Obtained this IRI surrounded by angled brackets.
-     * 
+     *
      * @return This IRI surrounded by &lt; and &gt;
      */
     public String toQuotedString() {
-        return '<' + namespace + remainder + '>';
+        return ntriplesString();
     }
 
     /**
      * Creates an IRI from the specified String.
-     * 
+     *
      * @param str
      *        The String that specifies the IRI
      * @return The IRI that has the specified string representation.
@@ -206,7 +206,7 @@ public class IRI
     /**
      * Creates an IRI by concatenating two strings. The full IRI is an IRI that
      * contains the characters in prefix + suffix.
-     * 
+     *
      * @param prefix
      *        The first string
      * @param suffix
@@ -281,7 +281,7 @@ public class IRI
 
     /**
      * Gets an auto-generated ontology document IRI.
-     * 
+     *
      * @return An auto-generated ontology document IRI. The IRI has the form
      *         {@code owlapi:ontologyNNNNNNNNNNN}
      */
@@ -307,7 +307,7 @@ public class IRI
     /**
      * Constructs an IRI which is built from the concatenation of the specified
      * prefix and suffix.
-     * 
+     *
      * @param prefix
      *        The prefix.
      * @param suffix
@@ -433,10 +433,7 @@ public class IRI
 
     @Override
     public String toString() {
-        if (remainder.isEmpty()) {
-            return namespace;
-        }
-        return namespace + remainder;
+    	return getIRIString();
     }
 
     @Override
@@ -473,4 +470,17 @@ public class IRI
         IRI other = (IRI) obj;
         return remainder.equals(other.remainder) && other.namespace.equals(namespace);
     }
+
+  	@Override
+  	public String ntriplesString() {
+  		return '<' + namespace + remainder + '>';
+  	}
+
+  	@Override
+  	public String getIRIString() {
+          if (remainder.isEmpty()) {
+              return namespace;
+          }
+          return namespace + remainder;
+  	}
 }

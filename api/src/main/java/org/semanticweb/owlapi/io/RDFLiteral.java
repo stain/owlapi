@@ -1,7 +1,7 @@
 /* This file is part of the OWL API.
  * The contents of this file are subject to the LGPL License, Version 3.0.
  * Copyright 2014, The University of Manchester
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.util.EscapeUtils;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
@@ -26,7 +27,7 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
  *         Informatics Group
  * @since 3.2
  */
-public class RDFLiteral extends RDFNode {
+public class RDFLiteral extends RDFNode implements org.apache.commons.rdf.api.Literal {
 
     private final @Nonnull String lexicalValue;
     private final @Nonnull String lang;
@@ -35,7 +36,7 @@ public class RDFLiteral extends RDFNode {
 
     /**
      * Constructor for plain literal wrappers.
-     * 
+     *
      * @param literal
      *        lexical form
      * @param lang
@@ -73,6 +74,9 @@ public class RDFLiteral extends RDFNode {
         return hashCode;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj == this) {
@@ -109,10 +113,28 @@ public class RDFLiteral extends RDFNode {
     }
 
     /**
+     * {@inheritDoc}
+     */
+  	@Override
+  	public String getLexicalForm() {
+  		return getLexicalValue();
+  	}
+
+    /**
      * @return the lang tag for this literal
      */
     public String getLang() {
         return lang;
+    }
+
+    @Override
+    public java.util.Optional<String> getLanguageTag() {
+    	if (hasLang()) {
+    		return java.util.Optional.notNull(lang);
+    	} else {
+    		return java.util.Optional.empty();
+    	}
+
     }
 
     /**
@@ -157,4 +179,20 @@ public class RDFLiteral extends RDFNode {
         }
         return diff;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+  	@Override
+  	public String ntriplesString() {
+  		String escaped = '"' +
+  				EscapeUtils.escapeString(getLexicalValue()).
+  				replace("\n", "\\n").replace("\r", "\\r") + '"';
+  		if (hasLang()) {
+  			return escaped + "@" + getLang();
+  		} else {
+  			return escaped + "^^" + getDatatype().ntriplesString();
+  		}
+  	}
+
 }
